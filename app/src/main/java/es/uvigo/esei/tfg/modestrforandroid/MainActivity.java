@@ -35,6 +35,10 @@ public class MainActivity extends Activity {
     private GBIFDownloader gbifDownloader;
     private ArrayList<Occurrence> pointList;
 
+    /**
+     * Llamado cuando se crea la actividad por primera vez.
+     * @param savedInstanceState contiene el estado de la actividad.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,9 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Llamado cuando la actividad es visible para el usuario.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -59,6 +66,11 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Inicializa el contenido del menú de opciones.
+     * @param menu gestiona los elementos del menú.
+     * @return true si el menú se va a mostrar. False si no se va a mostrar.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -77,6 +89,12 @@ public class MainActivity extends Activity {
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            /**
+             * Llamado cuando el usuario envía la consulta.
+             * @param s cadena de texto con la consulta.
+             * @return true si la consulta ha sido manejada por el oyente, false para que el
+             * SearchView realice la acción predeterminada.
+             */
             @Override
             public boolean onQueryTextSubmit(String s) {
                 progressDialog = new ProgressDialog(MainActivity.this);
@@ -90,6 +108,13 @@ public class MainActivity extends Activity {
                 return false;
             }
 
+            /**
+             * Llamado cuando cambia el texto de la consulta.
+             * @param s cadena de texto con la consulta.
+             * @return false si el SearchView debe realizar la acción predeterminada de mostrar
+             * alguna sugerencia, si está disponible, true si la acción fue manejada por el
+             * oyente.
+             */
             @Override
             public boolean onQueryTextChange(String s) {
                 return false;
@@ -99,6 +124,11 @@ public class MainActivity extends Activity {
         return true;
     }
 
+    /**
+     * Llamado cada vez que se selecciona un elemento en el menú de opciones.
+     * @param item elemendo del menú que se ha seleccionado.
+     * @return false para permitir el procesamiento de menú normal, true para consumir aquí.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -132,6 +162,10 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Llamado para recuperar el estado de una actividad.
+     * @param savedInstanceState contiene el estado de la actividad.
+     */
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putParcelableArrayList("points", pointList);
@@ -187,6 +221,13 @@ public class MainActivity extends Activity {
         public GoogleMapFragment() {
         }
 
+        /**
+         * Llamado para que la instancia de un fragmento se pase a la interfaz de usuario.
+         * @param inflater usado para inflar la vista en el fragmento.
+         * @param container si no es nulo, contiene la vista superior que debe ser conectada.
+         * @param savedInstanceState contiene el estado de la actividad.
+         * @return devuelve la vista del fragmento, o un valor nulo.
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -200,12 +241,17 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Tarea asíncrona que se encarga de descargar los datos de GBIF.
+     * Se encarga de descargar los datos de GBIF.
      */
     private class GBIFDownloader extends AsyncTask<String,Integer,ArrayList<Occurrence>> {
         private static final String URLDataOcurrence = "http://data.gbif.org/ws/rest/occurrence/list?scientificname=";
         private GBIFDataParser gbifDataParser;
 
+        /**
+         * Tareas para hacer en segundo plano.
+         * @param strings cadena de texto con el nombre científico de la especie.
+         * @return ArrayList con las coordenadas de la especie.
+         */
         @Override
         protected ArrayList<Occurrence> doInBackground(String... strings) {
             String scientificName = strings[0];
@@ -216,6 +262,9 @@ public class MainActivity extends Activity {
             return gbifDataParser.parse();
         }
 
+        /**
+         * Llamado antes de ejecutar la tarea.
+         */
         @Override
         protected void onPreExecute() {
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -229,6 +278,10 @@ public class MainActivity extends Activity {
             progressDialog.show();
         }
 
+        /**
+         * Llamado después de ejecutar la tarea.
+         * @param result ArrayList con las coordenadas de la especie.
+         */
         @Override
         protected void onPostExecute(ArrayList<Occurrence> result) {
             if (progressDialog != null) {
@@ -248,6 +301,9 @@ public class MainActivity extends Activity {
             drawMarkers(result);
         }
 
+        /**
+         * Llamado cuando se cancela la tarea.
+         */
         @Override
         protected void onCancelled() {
             Toast.makeText(getApplicationContext(), getString(R.string.action_download_canceled),

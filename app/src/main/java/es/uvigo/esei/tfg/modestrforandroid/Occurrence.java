@@ -43,11 +43,20 @@ public class Occurrence implements Parcelable{
         this.longitude = longitude;
     }
 
+    /**
+     * Describe los tipos de objetos especiales en representación marshalled.
+     * @return una máscara de bits que indica el conjunto de tipos de objetos especiales.
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Aplana el objeto actual en un paquete.
+     * @param parcel objeto Parcel donde debe ser escrito
+     * @param i flags adicionales sobre cómo se debe escribir el objeto
+     */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 

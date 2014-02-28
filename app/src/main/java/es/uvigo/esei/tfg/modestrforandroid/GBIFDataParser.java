@@ -36,7 +36,7 @@ public class GBIFDataParser {
 
     /**
      * Define las acciones a realizar para cada evento asociadas a etiquetas xml.
-     * @return lista con el total de @link es.uvigo.esei.tfg.modestrforandroid.Occurrence
+     * @return ArrayList con las coordenadas.
      */
     public ArrayList<Occurrence> parse() {
         final String gbifNS = "http://portal.gbif.org/ws/response/gbif";
