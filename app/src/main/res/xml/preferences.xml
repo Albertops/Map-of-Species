@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/general_options_category_title">
+
+        <ListPreference
+            android:key="map_type"
+            android:title="@string/map_type_title"
+            android:summary="@string/map_type_summary"
+            android:dialogTitle="@string/map_type_title"
+            android:entries="@array/map_type_entries"
+            android:entryValues="@array/map_type_values"
+            android:defaultValue="terrain" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/search_options_category_title">
+
+        <MultiSelectListPreference
+            android:key="kind_records"
+            android:title="@string/kind_records_title"
+            android:summary="@string/kind_records_summary"
+            android:dialogTitle="@string/kind_records_title"
+            android:entries="@array/kind_records_entries"
+            android:entryValues="@array/kind_records_values"
+            android:defaultValue="@array/kind_records_default_values" />
+
+        <yuku.ambilwarna.widget.AmbilWarnaPreference
+            android:key="default_color"
+            android:defaultValue="0xffff5e56"
+            android:title="@string/pick_color_button"
+            android:summary="@string/pick_color_summary" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

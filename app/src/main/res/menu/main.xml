@@ -1,36 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.uvigo.esei.tfg.modestrforandroid.MainActivity" >
-    
-    <item android:id="@+id/action_map_type_normal"
-        android:title="@string/action_map_type_normal"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/action_map_type_hybrid"
-        android:title="@string/action_map_type_hybrid"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/action_map_type_satellite"
-        android:title="@string/action_map_type_satellite"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/action_map_type_terrain"
-        android:title="@string/action_map_type_terrain"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
 
     <item android:id="@+id/action_map_clear"
         android:title="@string/action_map_clear"
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@drawable/ic_action_search"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom|collapseActionView"
         android:actionViewClass="android.widget.SearchView" />
 
 </menu>

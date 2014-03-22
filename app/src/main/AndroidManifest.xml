@@ -7,15 +7,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCU8TqpPDMZtiUUIjIv9qn3MGLbQNvn2nQ" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="android.app.default_searchable"
             android:value="es.uvigo.esei.tfg.modestrforandroid.SearchResultsActivity" />
@@ -25,18 +22,18 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="es.uvigo.esei.tfg.modestrforandroid.SearchResultsActivity"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+            android:label="@string/app_name"
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name="es.uvigo.esei.tfg.modestrforandroid.SettingsActivity"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 

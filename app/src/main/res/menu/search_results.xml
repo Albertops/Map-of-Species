@@ -2,14 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.uvigo.esei.tfg.modestrforandroid.SearchResultsActivity" >
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+    <item android:id="@+id/action_cancel"
+        android:title="@string/action_cancel"
+        android:icon="@drawable/ic_action_cancel"
+        android:showAsAction="always" />
 
-    <item android:id="@+id/action_search"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_action_search"
-        android:showAsAction="always"
-        android:actionViewClass="android.widget.SearchView" />
+    <item android:id="@+id/action_accept"
+        android:title="@string/action_accept"
+        android:icon="@drawable/ic_action_accept"
+        android:showAsAction="always" />
 </menu>

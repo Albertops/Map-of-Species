@@ -10,6 +10,49 @@ import android.os.Parcelable;
 public class Occurrence implements Parcelable{
     private Float latitude;
     private Float longitude;
+    private int color;
+
+    /**
+     * Crea un nuevo objeto de registro.
+     */
+    public Occurrence() {
+    }
+
+    /**
+     * Lee los objetos de un Parcel.
+     * @param in Parcel a leer.
+     */
+    private Occurrence(Parcel in) {
+        latitude = in.readFloat();
+        longitude = in.readFloat();
+        color = in.readInt();
+    }
+
+    /**
+     * Interfaz que proporciona un campo creador público que genera instancias de la clase
+     * Parcelable desde un Parcel.
+     */
+    public static final Parcelable.Creator<Occurrence> CREATOR
+            = new Parcelable.Creator<Occurrence>() {
+
+        /**
+         * Crea una nueva instancia de la clase Parcelable.
+         * @param in paquete para leer los datos del objeto.
+         * @return nueva instancia de la clase Parcelable.
+         */
+        public Occurrence createFromParcel(Parcel in) {
+            return new Occurrence(in);
+        }
+
+        /**
+         * Crea un nuevo array de la clase Parcelable.
+         * @param size tamaño del array.
+         * @return array de la clase Parcelable.
+         */
+        public Occurrence[] newArray(int size) {
+            return new Occurrence[size];
+        }
+    };
 
     /**
      * Devuelve la latitud.
@@ -25,6 +68,14 @@ public class Occurrence implements Parcelable{
      */
     public Float getLongitude() {
         return longitude;
+    }
+
+    /**
+     * Devuelve el color.
+     * @return color actual.
+     */
+    public int getColor() {
+        return color;
     }
 
     /**
@@ -44,6 +95,14 @@ public class Occurrence implements Parcelable{
     }
 
     /**
+     * Permite asignar un color.
+     * @param color representa el color.
+     */
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    /**
      * Describe los tipos de objetos especiales en representación marshalled.
      * @return una máscara de bits que indica el conjunto de tipos de objetos especiales.
      */
@@ -59,6 +118,8 @@ public class Occurrence implements Parcelable{
      */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        parcel.writeFloat(latitude);
+        parcel.writeFloat(longitude);
+        parcel.writeInt(color);
     }
 }
