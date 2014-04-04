@@ -1,11 +1,17 @@
 package yuku.ambilwarna;
 
-import android.app.*;
-import android.content.*;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class AmbilWarnaDialog {
 	public interface OnAmbilWarnaListener {

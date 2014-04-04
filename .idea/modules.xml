@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/libraries/AmbilWarna/AmbilWarna.iml" filepath="$PROJECT_DIR$/libraries/AmbilWarna/AmbilWarna.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ModestRforAndroid.iml" filepath="$PROJECT_DIR$/ModestRforAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MapOfSpecies.iml" filepath="$PROJECT_DIR$/MapOfSpecies.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

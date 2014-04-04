@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ModestR for Android</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Map of Species</string>
     <string name="action_search">Search</string>
     <string name="action_map_type_normal">Normal</string>
     <string name="action_map_type_hybrid">Hybrid</string>
@@ -33,6 +32,33 @@
     <string name="pick_color_summary">Select a color to use by default in markers</string>
     <string name="map_type_title">Map type</string>
     <string name="map_type_summary">Select the default map type</string>
+    <string name="action_map_save">Save map</string>
+    <string name="action_map_load">Load map</string>
+    <string name="action_map_delete">Delete map</string>
+    <string name="dialog_enter_name">Enter the name of the map</string>
+    <string name="dialog_load_name">Select the map to load</string>
+    <string name="dialog_delete_name">Select the map to delete</string>
+    <string name="title_activity_search_results">Search results</string>
+    <string name="action_save_data">Saving data...</string>
+    <string name="error_saving_data">No data have been saved. Please try again</string>
+    <string name="no_data">No saved data</string>
+    <string name="action_load_data">Loading data...</string>
+    <string name="action_delete_data">Deleting data...</string>
+    <string name="no_markers">There are no markers on the map</string>
+    <string name="action_rendering_map">Rendering map...</string>
+    <string name="empty_name">Not allowed empty names</string>
+    <string name="action_data_saved">Data have been saved</string>
+    <string name="action_data_loaded">Data have been loaded</string>
+    <string name="action_data_deleted">Data have been deleted</string>
+    <string name="valid_records">are valid record(s)</string>
+    <string name="action_drawing_markers">Drawing markers...</string>
+    <string name="skip_records_00">Skip records in 0.0 coordinates</string>
+    <string name="skip_duplicate_records">Skip records with same longitude and latitude coordinates</string>
+    <string name="welcome_dialog_title">Connecting to GBIF online database</string>
+    <string name="welcome_dialog_header">Before using this function, please first check the GBIF data use agreement:</string>
+    <string name="welcome_dialog_body">Press Accept to continue downloading data from GBIF. Otherwise press Cancel</string>
+    <string name="drawer_open">Hello Drawer!</string>
+    <string name="drawer_close">Goodbye Drawer!</string>
 
     <string-array name="kind_records_entries">
         <item>Specimen</item>
@@ -56,7 +82,7 @@
         <item>specimen</item>
         <item>observation</item>
     </string-array>
-    
+
     <string-array name="map_type_entries">
         <item>Normal</item>
         <item>Hybrid</item>
@@ -70,5 +96,21 @@
         <item>satellite</item>
         <item>terrain</item>
     </string-array>
+
+    <string-array name="drawer_options">
+        <item>Save map</item>
+        <item>Load map</item>
+        <item>Delete map</item>
+        <item>Clear map</item>
+        <item>Settings</item>
+    </string-array>
+
+    <array name="drawer_icons">
+        <item>@drawable/ic_action_save_dark</item>
+        <item>@drawable/ic_action_storage_dark</item>
+        <item>@drawable/ic_action_discard_dark</item>
+        <item>@drawable/ic_action_place_dark</item>
+        <item>@drawable/ic_action_settings_dark</item>
+    </array>
 
 </resources>
