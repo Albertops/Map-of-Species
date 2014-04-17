@@ -28,8 +28,6 @@
     <string name="no_synonyms_found">No synonyms found</string>
     <string name="kind_records_title">Kind of records</string>
     <string name="kind_records_summary">Select the kind of records to download</string>
-    <string name="pick_color_button">Pick a color</string>
-    <string name="pick_color_summary">Select a color to use by default in markers</string>
     <string name="map_type_title">Map type</string>
     <string name="map_type_summary">Select the default map type</string>
     <string name="action_map_save">Save map</string>
@@ -55,10 +53,26 @@
     <string name="skip_records_00">Skip records in 0.0 coordinates</string>
     <string name="skip_duplicate_records">Skip records with same longitude and latitude coordinates</string>
     <string name="welcome_dialog_title">Connecting to GBIF online database</string>
-    <string name="welcome_dialog_header">Before using this function, please first check the GBIF data use agreement:</string>
+    <string name="welcome_dialog_header">Before using this App, please first check the GBIF data use agreement:</string>
     <string name="welcome_dialog_body">Press Accept to continue downloading data from GBIF. Otherwise press Cancel</string>
     <string name="drawer_open">Hello Drawer!</string>
     <string name="drawer_close">Goodbye Drawer!</string>
+    <string name="title_dialog_select_species">Convex hull</string>
+    <string name="dialog_select_species">Select species to apply the conxex hull</string>
+    <string name="title_convex_hull_color">Convex hull color</string>
+    <string name="summary_convex_hull_color">Select a color to use for filling</string>
+    <string name="title_markers_color">Markers color</string>
+    <string name="summary_markers_color">Select a color to use in markers</string>
+    <string name="pick_color_button">Pick a color</string>
+    <string name="dialog_select_color">Pick a color</string>
+    <string name="subtext_dialog_select_color">Select a color from the list</string>
+    <string name="action_drawing_convex_hull">Drawing convex hull...</string>
+    <string name="seek_bar_title">Alpha channel</string>
+    <string name="select_default_color_convex_hull">Select default color for fill</string>
+    <string name="title_delete_history">Clear history</string>
+    <string name="summary_delete_history">Clear the suggestion data</string>
+    <string name="delete_history">The history has been removed</string>
+    <string name="dialog_delete_history">Are you sure?</string>
 
     <string-array name="kind_records_entries">
         <item>Specimen</item>
@@ -102,6 +116,7 @@
         <item>Load map</item>
         <item>Delete map</item>
         <item>Clear map</item>
+        <item>Convex hull</item>
         <item>Settings</item>
     </string-array>
 
@@ -110,7 +125,34 @@
         <item>@drawable/ic_action_storage_dark</item>
         <item>@drawable/ic_action_discard_dark</item>
         <item>@drawable/ic_action_place_dark</item>
+        <item>@drawable/ic_action_convex_hull_dark</item>
         <item>@drawable/ic_action_settings_dark</item>
+    </array>
+
+    <string-array name="colors">
+        <item>Azure</item>
+        <item>Blue</item>
+        <item>Cyan</item>
+        <item>Green</item>
+        <item>Magenta</item>
+        <item>Orange</item>
+        <item>Red</item>
+        <item>Rose</item>
+        <item>Violet</item>
+        <item>Yellow</item>
+    </string-array>
+
+    <array name="color_icons">
+        <item>@drawable/ic_color_azure</item>
+        <item>@drawable/ic_color_blue</item>
+        <item>@drawable/ic_color_cyan</item>
+        <item>@drawable/ic_color_green</item>
+        <item>@drawable/ic_color_magenta</item>
+        <item>@drawable/ic_color_orange</item>
+        <item>@drawable/ic_color_red</item>
+        <item>@drawable/ic_color_rose</item>
+        <item>@drawable/ic_color_violet</item>
+        <item>@drawable/ic_color_yellow</item>
     </array>
 
 </resources>

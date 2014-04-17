@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.uvigo.esei.tfg.mapofspecies.MainActivity" >
+    tools:context="es.uvigo.esei.tfg.mapofspecies.main.MainActivity" >
 
     <item android:id="@+id/action_search"
         android:title="@string/action_search"

@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/general_options_category_title">
 
@@ -12,6 +10,16 @@
             android:entries="@array/map_type_entries"
             android:entryValues="@array/map_type_values"
             android:defaultValue="terrain" />
+
+        <es.uvigo.esei.tfg.mapofspecies.preferences.ColorPreference
+            android:key="markers_color"
+            android:layout="@layout/preference_markers_color"
+            android:defaultValue="ic_color_red" />
+
+        <es.uvigo.esei.tfg.mapofspecies.preferences.ColorPreference
+            android:key="convex_hull_color"
+            android:layout="@layout/preference_convex_hull_color"
+            android:defaultValue="ic_color_yellow" />
 
     </PreferenceCategory>
 
@@ -27,12 +35,11 @@
             android:entryValues="@array/kind_records_values"
             android:defaultValue="@array/kind_records_default_values" />
 
-        <yuku.ambilwarna.widget.AmbilWarnaPreference
-            android:key="default_color"
-            android:defaultValue="0xffff5e56"
-            android:title="@string/pick_color_button"
-            android:icon="@drawable/ic_action_place"
-            android:summary="@string/pick_color_summary" />
+        <Preference
+            android:key="delete_history"
+            android:title="@string/title_delete_history"
+            android:icon="@drawable/ic_action_discard"
+            android:summary="@string/summary_delete_history" />
 
     </PreferenceCategory>
 </PreferenceScreen>

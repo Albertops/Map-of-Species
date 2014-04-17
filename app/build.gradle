@@ -21,6 +21,5 @@ android {
 dependencies {
     compile 'com.google.android.gms:play-services:4.2.42'
     compile 'com.android.support:support-v4:19.0.1'
-    compile project(':libraries:AmbilWarna')
     compile files('/Users/apsoto/AndroidStudioProjects/MapOfSpecies/libraries/gson-2.2.4.jar')
 }
