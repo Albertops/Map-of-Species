@@ -23,8 +23,8 @@ public class Occurrence implements Parcelable{
         name = in.readString();
     }
 
-    public static final Parcelable.Creator<Occurrence> CREATOR
-            = new Parcelable.Creator<Occurrence>() {
+    public static final Creator<Occurrence> CREATOR
+            = new Creator<Occurrence>() {
 
         public Occurrence createFromParcel(Parcel in) {
             return new Occurrence(in);

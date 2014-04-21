@@ -104,7 +104,7 @@ public class ColorPreference extends Preference {
     /**
      * Permite guardar y restaurar los objetos de la clase.
      */
-    private static class SavedState extends Preference.BaseSavedState {
+    private static class SavedState extends BaseSavedState {
         int value;
 
         public SavedState(Parcelable superState) {
@@ -122,8 +122,8 @@ public class ColorPreference extends Preference {
             dest.writeInt(value);
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
+        public static final Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
 
                     public SavedState createFromParcel(Parcel in) {
                         return new SavedState(in);
