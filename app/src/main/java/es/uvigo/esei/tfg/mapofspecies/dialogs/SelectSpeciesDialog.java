@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.ui;
+package es.uvigo.esei.tfg.mapofspecies.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -85,6 +85,7 @@ public class SelectSpeciesDialog extends DialogFragment{
                     );
 
             final ListView listView;
+
             if (view != null) {
                 listView = (ListView) view.findViewById(R.id.listView);
 

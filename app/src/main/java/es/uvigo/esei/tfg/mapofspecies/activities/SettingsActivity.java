@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.main;
+package es.uvigo.esei.tfg.mapofspecies.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,10 +8,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.widget.ImageView;
 
-import es.uvigo.esei.tfg.mapofspecies.preferences.ColorPreference;
-import es.uvigo.esei.tfg.mapofspecies.ui.DeleteHistoryDialog;
 import es.uvigo.esei.tfg.mapofspecies.R;
-import es.uvigo.esei.tfg.mapofspecies.ui.SelectColorDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.DeleteHistoryDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.SelectColorDialog;
+import es.uvigo.esei.tfg.mapofspecies.preferences.ColorPreference;
 
 /**
  * Muestra la pantalla de preferencias.

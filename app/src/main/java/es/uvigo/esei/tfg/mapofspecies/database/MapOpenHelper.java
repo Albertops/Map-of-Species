@@ -9,28 +9,37 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @author Alberto Pardellas Soto
  */
 public class MapOpenHelper extends SQLiteOpenHelper {
-    private static final String MAP_TABLE_CREATE = "CREATE TABLE Names " +
+    private static final String MAP_TABLE_CREATE = "CREATE TABLE names " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
             "name TEXT);";
 
-    private static final String NAME_TABLE_CREATE = "CREATE TABLE Maps " +
+    private static final String NAME_TABLE_CREATE = "CREATE TABLE maps " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
             "latitude REAL, " +
             "longitude REAL, " +
             "color INTEGER, " +
             "name TEXT," +
-            "names_id INTEGER REFERENCES Names (id));";
+            "names_id INTEGER REFERENCES names (id));";
 
-    private static final String CONVEX_HULL_TABLE_CREATE = "CREATE TABLE Convex_Hull " +
+    private static final String CONVEX_HULL_TABLE_CREATE = "CREATE TABLE convex_hull " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
-            "string_array TEXT," +
-            "convex_hull_id INTEGER REFERENCES Names (id));";
+            "json_array TEXT," +
+            "convex_hull_id INTEGER REFERENCES names (id));";
 
     private static final String MAP_TABLE_DROP = "DROP TABLE IF EXISTS Maps";
     private static final String NAME_TABLE_DROP = "DROP TABLE IF EXISTS Names";
     private static final String CONVEX_HULL_TABLE_DROP = "DROP TABLE IF EXISTS Convex_Hull";
 
-    public MapOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /**
+     * Constructor para crear un nuevo helper de la BD.
+     * @param context contexto en el que se crea.
+     * @param name nombre de la BD.
+     * @param factory usado para crear objetos cursor. Nulo para la configuración por defecto.
+     * @param version versión de la BD.
+     */
+    public MapOpenHelper(Context context, String name,
+                         SQLiteDatabase.CursorFactory factory, int version) {
+
         super(context, name, factory, version);
     }
 

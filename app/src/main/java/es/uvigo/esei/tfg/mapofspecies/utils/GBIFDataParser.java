@@ -262,8 +262,17 @@ public class GBIFDataParser {
     }
 
     /**
+     *
+     * @param firstUrl cadena de texto con la url.
+     * @return
+     */
+
+    /**
      * Descarga todos los datos a partir de una url.
      * @param firstUrl cadena de texto con la url.
+     * @param o coordenadas cargadas en el mapa.
+     * @param c color actual de los marcadores.
+     * @param n nombre actual de la especie.
      * @return ArrayList con las coordenadas.
      */
     public ArrayList<Occurrence> getOccurrences(String firstUrl, ArrayList<Occurrence> o, int c, String n) {

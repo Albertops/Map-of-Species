@@ -9,9 +9,9 @@ public class ItemObject {
     private int icon;
 
     /**
-     * Establece el título y el ícono.
-     * @param title
-     * @param icon
+     * Constructor para los elementos asociados al DrawerLayout.
+     * @param title representa un título.
+     * @param icon representa un ícono.
      */
     public ItemObject(String title, int icon) {
         this.title = title;

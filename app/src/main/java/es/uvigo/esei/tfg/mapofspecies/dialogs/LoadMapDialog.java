@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.ui;
+package es.uvigo.esei.tfg.mapofspecies.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,17 +17,17 @@ import java.util.ArrayList;
 import es.uvigo.esei.tfg.mapofspecies.R;
 
 /**
- * Crea un diálogo que permite seleccionar el mapa que se va a borrar.
+ * Crea un diálogo que permite seleccionar el mapa que se va a cargar.
  * @author Alberto Pardellas Soto
  */
-public class DeleteMapDialog extends DialogFragment{
+public class LoadMapDialog extends DialogFragment{
     private String mapSelected = "";
-    private ArrayList<String> results;
+    private ArrayList<String> results = new ArrayList<String>();
 
-    public DeleteMapDialog() {
+    public LoadMapDialog() {
     }
 
-    public DeleteMapDialog(ArrayList<String> results) {
+    public LoadMapDialog(ArrayList<String> results) {
         this.results = results;
     }
 
@@ -44,17 +44,18 @@ public class DeleteMapDialog extends DialogFragment{
         if (getActivity() != null) {
             builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            View view = inflater.inflate(R.layout.dialog_delete_map, null);
+            View view = inflater.inflate(R.layout.dialog_load_map, null);
             builder.setView(view)
-                    .setTitle(R.string.action_map_delete)
-                    .setIcon(R.drawable.ic_action_discard)
+                    .setTitle(R.string.action_map_load)
+                    .setIcon(R.drawable.ic_action_storage)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    deleteMapDialogListener.onDialogPositiveClickDeleteMap(mapSelected);
+                                    loadMapDialogListener.onDialogPositiveClickLoadMap(mapSelected);
                                 }
-                            })
+                            }
+                    )
                     .setNegativeButton(getString(R.string.action_cancel),
                             new DialogInterface.OnClickListener() {
                                 @Override
@@ -65,7 +66,6 @@ public class DeleteMapDialog extends DialogFragment{
                     );
 
             final ListView listView;
-
             if (view != null) {
                 listView = (ListView) view.findViewById(R.id.listView);
 
@@ -98,18 +98,18 @@ public class DeleteMapDialog extends DialogFragment{
     /**
      * Interfaz para el botón aceptar del diálogo.
      */
-    public interface DeleteMapDialogListener {
-        public void onDialogPositiveClickDeleteMap(String mapSelected);
+    public interface LoadMapDialogListener {
+        public void onDialogPositiveClickLoadMap(String mapSelected);
     }
 
-    DeleteMapDialogListener deleteMapDialogListener;
+    LoadMapDialogListener loadMapDialogListener;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            deleteMapDialogListener = (DeleteMapDialogListener) activity;
+            loadMapDialogListener = (LoadMapDialogListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement NoticeDialogListener");

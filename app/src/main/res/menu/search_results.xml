@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.uvigo.esei.tfg.mapofspecies.main.SearchResultsActivity" >
+    tools:context="es.uvigo.esei.tfg.mapofspecies.activities.SearchResultsActivity" >
 
     <item android:id="@+id/action_cancel"
         android:title="@string/action_cancel"

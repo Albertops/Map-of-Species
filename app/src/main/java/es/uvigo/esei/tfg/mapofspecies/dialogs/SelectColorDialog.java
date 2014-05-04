@@ -1,31 +1,26 @@
-package es.uvigo.esei.tfg.mapofspecies.ui;
+package es.uvigo.esei.tfg.mapofspecies.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-import java.util.ArrayList;
-
 import es.uvigo.esei.tfg.mapofspecies.R;
-import es.uvigo.esei.tfg.mapofspecies.data.ItemObject;
-import es.uvigo.esei.tfg.mapofspecies.data.ListViewAdapter;
+import es.uvigo.esei.tfg.mapofspecies.data.ImageAdapter;
 
 /**
  * Crea un diálogo que permite seleccionar un color.
  * @author Alberto Pardellas Soto
  */
 public class SelectColorDialog extends DialogFragment {
-    private int colorSelected = 0;
     private int icon;
 
     public SelectColorDialog() {
@@ -55,45 +50,28 @@ public class SelectColorDialog extends DialogFragment {
                             }
                     );
 
-            final ListView listView;
+            final GridView gridView;
 
-            TypedArray colorIcons = getResources().obtainTypedArray(R.array.color_icons);
-            String[] colorNames = getResources().getStringArray(R.array.colors);
-            ArrayList<ItemObject> drawerItems = new ArrayList<ItemObject>();
-
-            if (colorIcons != null) {
-                drawerItems.add(new ItemObject(colorNames[0], colorIcons.getResourceId(0, -1)));
-                drawerItems.add(new ItemObject(colorNames[1], colorIcons.getResourceId(1, -1)));
-                drawerItems.add(new ItemObject(colorNames[2], colorIcons.getResourceId(2, -1)));
-                drawerItems.add(new ItemObject(colorNames[3], colorIcons.getResourceId(3, -1)));
-                drawerItems.add(new ItemObject(colorNames[4], colorIcons.getResourceId(4, -1)));
-                drawerItems.add(new ItemObject(colorNames[5], colorIcons.getResourceId(5, -1)));
-                drawerItems.add(new ItemObject(colorNames[6], colorIcons.getResourceId(6, -1)));
-                drawerItems.add(new ItemObject(colorNames[7], colorIcons.getResourceId(7, -1)));
-                drawerItems.add(new ItemObject(colorNames[8], colorIcons.getResourceId(8, -1)));
-                drawerItems.add(new ItemObject(colorNames[9], colorIcons.getResourceId(9, -1)));
-            }
+            Integer[] data = new Integer[] {
+                    R.drawable.ic_color_azure, R.drawable.ic_color_blue,
+                    R.drawable.ic_color_cyan, R.drawable.ic_color_green,
+                    R.drawable.ic_color_magenta, R.drawable.ic_color_orange,
+                    R.drawable.ic_color_red, R.drawable.ic_color_rose,
+                    R.drawable.ic_color_violet, R.drawable.ic_color_yellow };
 
             if (view != null) {
-                listView = (ListView) view.findViewById(R.id.listView);
+                gridView = (GridView) view.findViewById(R.id.gridView);
+                gridView.setAdapter(new ImageAdapter(view.getContext(), data));
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        getColor(i);
 
-                if (view.getContext() != null) {
-                    ListViewAdapter listViewAdapter = new ListViewAdapter(view.getContext(), drawerItems, R.layout.color_item);
-                    listView.setAdapter(listViewAdapter);
-                    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            colorSelected = i;
-                            listView.setItemChecked(i, true);
-                            getColor(colorSelected);
-
-                            if (getDialog() != null) {
-                                getDialog().dismiss();
-                            }
+                        if (getDialog() != null) {
+                            getDialog().dismiss();
                         }
-                    });
-                }
+                    }
+                });
             }
         }
 

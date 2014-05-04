@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.main;
+package es.uvigo.esei.tfg.mapofspecies.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,11 +40,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import es.uvigo.esei.tfg.mapofspecies.R;
+import es.uvigo.esei.tfg.mapofspecies.data.Occurrence;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.SelectColorDialog;
 import es.uvigo.esei.tfg.mapofspecies.providers.CustomSuggestionsProvider;
 import es.uvigo.esei.tfg.mapofspecies.utils.GBIFDataParser;
-import es.uvigo.esei.tfg.mapofspecies.data.Occurrence;
-import es.uvigo.esei.tfg.mapofspecies.R;
-import es.uvigo.esei.tfg.mapofspecies.ui.SelectColorDialog;
 
 /**
  * Muestra la lista de sinónimos y permite seleccionar el color de los marcadores entre otras
@@ -61,6 +62,7 @@ public class SearchResultsActivity extends Activity
     private String query;
     private int currentColor;
     private int currentColorID;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +229,17 @@ public class SearchResultsActivity extends Activity
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressDialog != null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+    @Override
     public void onDialogPositiveClickSelectColor(int color, int idIcon, String tag) {
         currentColor = color;
         currentColorID = idIcon;
@@ -365,7 +378,7 @@ public class SearchResultsActivity extends Activity
     }
 
     /**
-     * Elmimina elementos con coordinadas 0.0
+     * Elmimina elementos con coordenadas 0.0
      * @param occurrences ArrayList con las coordenadas.
      * @return ArrayList modificado.
      */
@@ -430,7 +443,6 @@ public class SearchResultsActivity extends Activity
         String urlCountOccurrences =
                 "http://data.gbif.org/ws/rest/occurrence/count?scientificname=";
 
-        ProgressDialog progressDialog;
         int totalOccurrences;
         int processedOccurrences;
 
@@ -489,6 +501,7 @@ public class SearchResultsActivity extends Activity
                     if(getApplicationContext() != null) {
                         Toast.makeText(getApplicationContext(), getString(R.string.action_download_canceled),
                                 Toast.LENGTH_LONG).show();
+
                     }
 
                     Intent intent = new Intent(SearchResultsActivity.this, MainActivity.class);
@@ -503,13 +516,6 @@ public class SearchResultsActivity extends Activity
 
         @Override
         protected void onPostExecute(ArrayList<Occurrence> result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            unlockScreenOrientation();
-
             result = deleteDuplicates(result);
 
             CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
@@ -523,6 +529,9 @@ public class SearchResultsActivity extends Activity
             if (checkBox2.isChecked()) {
                 result = deleteRecordsWithSameLoAndLa(result);
             }
+
+            progressDialog.dismiss();
+            unlockScreenOrientation();
 
             if (getApplicationContext() != null) {
                 Toast.makeText(getApplicationContext(),
@@ -549,7 +558,6 @@ public class SearchResultsActivity extends Activity
         String urlCountOccurrences =
                 "http://data.gbif.org/ws/rest/occurrence/count?scientificname=";
 
-        ProgressDialog progressDialog;
         int totalOccurrences;
 
         @Override
@@ -607,6 +615,7 @@ public class SearchResultsActivity extends Activity
                     if (getApplicationContext() != null) {
                         Toast.makeText(getApplicationContext(), getString(R.string.action_search_canceled),
                                 Toast.LENGTH_LONG).show();
+
                     }
 
                     Intent intent = new Intent(SearchResultsActivity.this, MainActivity.class);
@@ -620,17 +629,11 @@ public class SearchResultsActivity extends Activity
 
         @Override
         protected void onPostExecute(ArrayList<String> result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
-            unlockScreenOrientation();
-
             if (totalOccurrences == 0) {
                 if (getApplicationContext() != null){
                     Toast.makeText(getApplicationContext(), getString(R.string.no_records_found),
                             Toast.LENGTH_LONG).show();
+
                 }
 
                 Intent intent = new Intent(SearchResultsActivity.this, MainActivity.class);
@@ -644,9 +647,13 @@ public class SearchResultsActivity extends Activity
                 adapter.notifyDataSetChanged();
 
                 if (data.isEmpty()) {
-                    if (getApplicationContext() != null)
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_synonyms_found),
-                                Toast.LENGTH_LONG).show();
+                    if (getApplicationContext() != null) {
+                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.no_synonyms_found),
+                                Toast.LENGTH_LONG);
+
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 }
 
                 SearchRecentSuggestions suggestions = new SearchRecentSuggestions(
@@ -666,6 +673,9 @@ public class SearchResultsActivity extends Activity
                         listView.setItemChecked(i, true);
                 }
             }
+
+            progressDialog.dismiss();
+            unlockScreenOrientation();
         }
     }
 }

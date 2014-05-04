@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.ui;
+package es.uvigo.esei.tfg.mapofspecies.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -54,8 +55,11 @@ public class SaveMapDialog extends DialogFragment {
                                             saveMapDialogListener.onDialogPositiveClickSaveMap(mapName);
 
                                         } else {
-                                            Toast.makeText(getActivity(), getString(R.string.empty_name),
-                                                    Toast.LENGTH_LONG).show();
+                                            Toast toast = Toast.makeText(getActivity(), getString(R.string.empty_name),
+                                                    Toast.LENGTH_LONG);
+
+                                            toast.setGravity(Gravity.CENTER, 0, 0);
+                                            toast.show();
                                         }
                                     }
                                 }

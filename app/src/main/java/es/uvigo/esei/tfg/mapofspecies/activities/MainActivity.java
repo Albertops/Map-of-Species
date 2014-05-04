@@ -1,4 +1,4 @@
-package es.uvigo.esei.tfg.mapofspecies.main;
+package es.uvigo.esei.tfg.mapofspecies.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,21 +42,19 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 
-import es.uvigo.esei.tfg.mapofspecies.utils.ConvexHull;
-import es.uvigo.esei.tfg.mapofspecies.ui.DeleteMapDialog;
+import es.uvigo.esei.tfg.mapofspecies.R;
 import es.uvigo.esei.tfg.mapofspecies.data.ItemObject;
 import es.uvigo.esei.tfg.mapofspecies.data.ListViewAdapter;
-import es.uvigo.esei.tfg.mapofspecies.ui.LoadMapDialog;
 import es.uvigo.esei.tfg.mapofspecies.data.Occurrence;
-import es.uvigo.esei.tfg.mapofspecies.R;
-import es.uvigo.esei.tfg.mapofspecies.ui.SaveMapDialog;
-import es.uvigo.esei.tfg.mapofspecies.ui.SelectSpeciesDialog;
-import es.uvigo.esei.tfg.mapofspecies.ui.WelcomeDialog;
 import es.uvigo.esei.tfg.mapofspecies.database.MapOpenHelper;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.DeleteMapDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.LoadMapDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.SaveMapDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.SelectSpeciesDialog;
+import es.uvigo.esei.tfg.mapofspecies.dialogs.WelcomeDialog;
+import es.uvigo.esei.tfg.mapofspecies.utils.PolygonUtils;
 
 /**
  * Muestra la pantalla principal.
@@ -72,7 +71,8 @@ public class MainActivity extends Activity
     private DrawerLayout drawerLayout;
     private ListView listView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private LatLng centroid;
+    private ProgressDialog progressDialog;
+    private WelcomeDialog welcomeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +140,7 @@ public class MainActivity extends Activity
         Boolean showWelcomeDialog = sharedPreferences.getBoolean("show_welcome_dialog", true);
 
         if (showWelcomeDialog) {
-            WelcomeDialog welcomeDialog = new WelcomeDialog();
+            welcomeDialog = new WelcomeDialog();
             welcomeDialog.setCancelable(false);
             welcomeDialog.show(getFragmentManager(), "");
         }
@@ -196,10 +196,8 @@ public class MainActivity extends Activity
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            savedInstanceState.putParcelableArrayList("points", pointList);
-            savedInstanceState.putParcelableArrayList("polygon_options", polygonOptionsList);
-        }
+        savedInstanceState.putParcelableArrayList("points", pointList);
+        savedInstanceState.putParcelableArrayList("polygon_options", polygonOptionsList);
     }
 
     @Override
@@ -208,6 +206,24 @@ public class MainActivity extends Activity
 
         pointList = savedInstanceState.getParcelableArrayList("points");
         polygonOptionsList = savedInstanceState.getParcelableArrayList("polygon_options");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (welcomeDialog != null) {
+            welcomeDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     /**
@@ -234,7 +250,7 @@ public class MainActivity extends Activity
         Cursor cursor;
 
         if (sqLiteDatabase != null) {
-            cursor = sqLiteDatabase.query("Names", fields, "name=?", args, null, null, null);
+            cursor = sqLiteDatabase.query("names", fields, "name=?", args, null, null, null);
 
             if (cursor.moveToFirst()) {
                 long nameId = cursor.getLong(0);
@@ -268,7 +284,7 @@ public class MainActivity extends Activity
         Cursor cursor;
 
         if (sqLiteDatabase != null) {
-            cursor = sqLiteDatabase.query("Names", fields, "name=?", args, null, null, null);
+            cursor = sqLiteDatabase.query("names", fields, "name=?", args, null, null, null);
 
             if (cursor.moveToFirst()) {
                 long nameId = cursor.getLong(0);
@@ -296,16 +312,6 @@ public class MainActivity extends Activity
             GoogleMap googleMap = ((MapFragment) getFragmentManager()
                     .findFragmentById(R.id.map)).getMap();
 
-            ArrayList<Occurrence> specie = new ArrayList<Occurrence>();
-
-            for (Occurrence occurrence : pointList) {
-                if (occurrence.getName().equals(nameSelected)) {
-                    specie.add(occurrence);
-                }
-            }
-
-            ArrayList<Occurrence> convexHull = ConvexHull.quickHull(specie);
-
             float[] hsv = new float[3];
 
             if (colorMarker) {
@@ -326,29 +332,33 @@ public class MainActivity extends Activity
 
             int fillColor = Color.HSVToColor(alphaChannel, hsv);
 
-            PolygonOptions polygonOptions = new PolygonOptions();
-            ArrayList<LatLng> points = new ArrayList<LatLng>();
+            ArrayList<Occurrence> occurrences = new ArrayList<Occurrence>();
+
+            for (Occurrence occurrence : pointList) {
+                if (occurrence.getName().equals(nameSelected)) {
+                    occurrences.add(occurrence);
+                }
+            }
+            PolygonUtils polygonUtils = new PolygonUtils();
+            ArrayList<Occurrence> convexHull = polygonUtils.calculateHulls(occurrences);
+            ArrayList<LatLng> convexHullPoints = new ArrayList<LatLng>();
 
             for (Occurrence occurrence : convexHull) {
-                points.add(new LatLng(occurrence.getLatitude(), occurrence.getLongitude()));
+                convexHullPoints.add(new LatLng(
+                        occurrence.getLatitude(), occurrence.getLongitude()));
             }
 
-            centroid = getCenter(points);
-
-            Collections.sort(points, new PolygonComparator());
-
-            polygonOptions.addAll(points);
+            PolygonOptions polygonOptions = new PolygonOptions();
             polygonOptions.strokeWidth(0);
             polygonOptions.fillColor(fillColor);
+            polygonOptions.addAll(convexHullPoints);
 
             if (polygonOptionsList == null) {
                 polygonOptionsList = new ArrayList<PolygonOptions>();
             }
 
             polygonOptionsList.add(polygonOptions);
-
             savePolygonsToJson(polygonOptionsList);
-
             googleMap.addPolygon(polygonOptions);
         }
     }
@@ -452,20 +462,29 @@ public class MainActivity extends Activity
     private void selectItem(int position) {
         switch (position) {
             case 0:
-                SaveMapDialog saveMapDialog = new SaveMapDialog();
-                saveMapDialog.show(getFragmentManager(), "");
+                if (pointList != null && !pointList.isEmpty()) {
+                    SaveMapDialog saveMapDialog = new SaveMapDialog();
+                    saveMapDialog.show(getFragmentManager(), "");
+
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            getString(R.string.no_markers), Toast.LENGTH_LONG);
+
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
 
                 break;
 
             case 1:
                 MapOpenHelper mapOpenHelper = new MapOpenHelper(this, "DBMaps", null, 1);
-                SQLiteDatabase sqLiteDatabase = mapOpenHelper.getWritableDatabase();
+                SQLiteDatabase sqLiteDatabase = mapOpenHelper.getReadableDatabase();
 
                 String[] fields = new String[] {"name"};
                 Cursor cursor;
 
                 if (sqLiteDatabase != null) {
-                    cursor = sqLiteDatabase.query("Names", fields, null, null, null, null, null);
+                    cursor = sqLiteDatabase.query("names", fields, null, null, null, null, null);
 
                     ArrayList<String> results = new ArrayList<String>();
 
@@ -481,7 +500,11 @@ public class MainActivity extends Activity
                         loadMapDialog.show(getFragmentManager(), "");
 
                     } else {
-                        Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(this, getString(R.string.no_data),
+                                Toast.LENGTH_LONG);
+
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
 
                     sqLiteDatabase.close();
@@ -496,7 +519,7 @@ public class MainActivity extends Activity
                 fields = new String[] {"name"};
 
                 if (sqLiteDatabase != null) {
-                    cursor = sqLiteDatabase.query("Names", fields, null, null, null, null, null);
+                    cursor = sqLiteDatabase.query("names", fields, null, null, null, null, null);
 
                     ArrayList<String> results = new ArrayList<String>();
 
@@ -512,7 +535,11 @@ public class MainActivity extends Activity
                         deleteMapDialog.show(getFragmentManager(), "");
 
                     } else {
-                        Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(this, getString(R.string.no_data),
+                                Toast.LENGTH_LONG);
+
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
 
                     sqLiteDatabase.close();
@@ -557,8 +584,11 @@ public class MainActivity extends Activity
 
                 } else {
                     if (getApplicationContext() != null) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_markers),
-                                Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                getString(R.string.no_markers), Toast.LENGTH_LONG);
+
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                 }
 
@@ -572,20 +602,6 @@ public class MainActivity extends Activity
         }
 
         drawerLayout.closeDrawer(listView);
-    }
-
-    private LatLng getCenter(ArrayList<LatLng> points) {
-        Double latitude = (double) 0;
-        Double longutude = (double) 0;
-
-        for (LatLng point : points) {
-            latitude += point.latitude;
-            longutude += point.longitude;
-        }
-
-        int totalPoints = points.size();
-
-        return new LatLng(latitude/totalPoints, longutude/totalPoints);
     }
 
     /**
@@ -608,11 +624,6 @@ public class MainActivity extends Activity
      * Se encarga de guardar los datos en una BD.
      */
     private class SaveDataToBD extends AsyncTask<String, Integer, Boolean> {
-        private static final String DATABASE_ERROR = "DATABASE_ERROR";
-        private static final String NO_MARKERS = "NO_MARKERS";
-
-        ProgressDialog progressDialog;
-        String error = "";
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -620,41 +631,34 @@ public class MainActivity extends Activity
             SQLiteDatabase sqLiteDatabase = mapOpenHelper.getWritableDatabase();
 
             if (sqLiteDatabase != null) {
-                if (pointList != null && !pointList.isEmpty()) {
-                    ContentValues nameValue = new ContentValues();
-                    nameValue.put("name", strings[0]);
-                    long nameId = sqLiteDatabase.insert("Names", null, nameValue);
+                ContentValues nameValue = new ContentValues();
+                nameValue.put("name", strings[0]);
+                long nameId = sqLiteDatabase.insert("names", null, nameValue);
 
-                    for (Occurrence occurrence : pointList) {
-                        ContentValues mapValues = new ContentValues();
+                for (Occurrence occurrence : pointList) {
+                    ContentValues mapValues = new ContentValues();
 
-                        mapValues.put("latitude", occurrence.getLatitude());
-                        mapValues.put("longitude", occurrence.getLongitude());
-                        mapValues.put("color", occurrence.getColor());
-                        mapValues.put("name", occurrence.getName());
-                        mapValues.put("names_id", nameId);
+                    mapValues.put("latitude", occurrence.getLatitude());
+                    mapValues.put("longitude", occurrence.getLongitude());
+                    mapValues.put("color", occurrence.getColor());
+                    mapValues.put("name", occurrence.getName());
+                    mapValues.put("names_id", nameId);
 
-                        sqLiteDatabase.insert("Maps", null, mapValues);
-                    }
-
-                    Gson gson = new Gson();
-                    Type type = type = new TypeToken<ArrayList<PolygonOptions>>(){}.getType();
-                    String string = gson.toJson(polygonOptionsList, type);
-
-                    ContentValues polygonOptionsValues = new ContentValues();
-                    polygonOptionsValues.put("string_array", string);
-                    polygonOptionsValues.put("convex_hull_id", nameId);
-
-                    sqLiteDatabase.insert("Convex_Hull", null, polygonOptionsValues);
-                    sqLiteDatabase.close();
-
+                    sqLiteDatabase.insert("maps", null, mapValues);
                 }
-                else {
-                    error = NO_MARKERS;
-                    return false;
-                }
+
+                Gson gson = new Gson();
+                Type type = type = new TypeToken<ArrayList<PolygonOptions>>(){}.getType();
+                String string = gson.toJson(polygonOptionsList, type);
+
+                ContentValues polygonOptionsValues = new ContentValues();
+                polygonOptionsValues.put("json_array", string);
+                polygonOptionsValues.put("convex_hull_id", nameId);
+
+                sqLiteDatabase.insert("convex_hull", null, polygonOptionsValues);
+                sqLiteDatabase.close();
+
             } else {
-                error = DATABASE_ERROR;
                 return false;
             }
 
@@ -674,22 +678,15 @@ public class MainActivity extends Activity
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
+            progressDialog.dismiss();
 
             if (getApplicationContext() != null) {
-                if (error.equals(DATABASE_ERROR)) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.error_saving_data),
-                            Toast.LENGTH_LONG).show();
-
-                } else if (error.equals(NO_MARKERS)) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_markers),
+                if (result) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.action_data_saved),
                             Toast.LENGTH_LONG).show();
 
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.action_data_saved),
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_saving_data),
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -702,12 +699,11 @@ public class MainActivity extends Activity
      * Se encarga de cargar los datos en la BD.
      */
     private class LoadDataFromBD extends AsyncTask<String, Integer, ArrayList<Occurrence>> {
-        ProgressDialog progressDialog;
 
         @Override
         protected ArrayList<Occurrence> doInBackground(String... strings) {
             MapOpenHelper mapOpenHelper = new MapOpenHelper(getBaseContext(), "DBMaps", null, 1);
-            SQLiteDatabase sqLiteDatabase = mapOpenHelper.getWritableDatabase();
+            SQLiteDatabase sqLiteDatabase = mapOpenHelper.getReadableDatabase();
             ArrayList<Occurrence> results = new ArrayList<Occurrence>();
 
             String[] fields = new String[] {"latitude", "longitude", "color", "name"};
@@ -715,7 +711,7 @@ public class MainActivity extends Activity
             Cursor cursor;
 
             if (sqLiteDatabase != null) {
-                cursor = sqLiteDatabase.query("Maps", fields, "names_id=?", args, null, null, null);
+                cursor = sqLiteDatabase.query("maps", fields, "names_id=?", args, null, null, null);
 
                 if (cursor != null) {
                     if (cursor.moveToFirst()) {
@@ -732,8 +728,8 @@ public class MainActivity extends Activity
                     }
                 }
 
-                fields = new String[] {"string_array"};
-                cursor = sqLiteDatabase.query("Convex_Hull", fields, "convex_hull_id=?", args, null, null, null);
+                fields = new String[] {"json_array"};
+                cursor = sqLiteDatabase.query("convex_hull", fields, "convex_hull_id=?", args, null, null, null);
 
                 if (cursor != null) {
                     if (cursor.moveToFirst()) {
@@ -765,10 +761,7 @@ public class MainActivity extends Activity
 
         @Override
         protected void onPostExecute(ArrayList<Occurrence> results) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
+            progressDialog.dismiss();
 
             unlockScreenOrientation();
             RenderingMap prepareMarkerOptions = new RenderingMap();
@@ -780,7 +773,6 @@ public class MainActivity extends Activity
      * Se encarga de borrar datos de la BD.
      */
     private class DeleteDataFromBD extends AsyncTask<String, Integer, Boolean> {
-        ProgressDialog progressDialog;
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -790,13 +782,13 @@ public class MainActivity extends Activity
             String[] args = new String[] {strings[0]};
 
             if (sqLiteDatabase != null) {
-                sqLiteDatabase.delete("Names", "_id=?", args);
-                sqLiteDatabase.delete("Maps", "names_id=?", args);
-                sqLiteDatabase.delete("Convex_Hull", "convex_hull_id=?", args);
+                sqLiteDatabase.delete("names", "_id=?", args);
+                sqLiteDatabase.delete("maps", "names_id=?", args);
+                sqLiteDatabase.delete("convex_hull", "convex_hull_id=?", args);
 
                 sqLiteDatabase.close();
-            }
-            else {
+
+            } else {
                 return false;
             }
 
@@ -816,14 +808,17 @@ public class MainActivity extends Activity
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
+            progressDialog.dismiss();
 
             if (getApplicationContext() != null) {
-                Toast.makeText(getApplicationContext(), getString(R.string.action_data_deleted),
-                        Toast.LENGTH_LONG).show();
+                if (result) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.action_data_deleted),
+                            Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_deleting_data),
+                            Toast.LENGTH_LONG).show();
+                }
             }
 
             unlockScreenOrientation();
@@ -834,7 +829,6 @@ public class MainActivity extends Activity
      * Se encarga de preparar y dibujar los marcadores en el mapa.
      */
     private class RenderingMap extends AsyncTask<ArrayList<Occurrence>, Integer, ArrayList<MarkerOptions>> {
-        ProgressDialog progressDialog;
 
         @Override
         protected ArrayList<MarkerOptions> doInBackground(ArrayList<Occurrence>... arrayLists) {
@@ -899,11 +893,7 @@ public class MainActivity extends Activity
                 }
             }
 
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-
+            progressDialog.dismiss();
             unlockScreenOrientation();
         }
     }
@@ -915,21 +905,6 @@ public class MainActivity extends Activity
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
-        }
-    }
-
-    public class PolygonComparator implements Comparator<LatLng> {
-        @Override
-        public int compare(LatLng o1, LatLng o2) {
-            double angle1 = Math.atan2(
-                    o1.latitude - centroid.latitude, o1.longitude - centroid.longitude);
-
-            double angle2 = Math.atan2(
-                    o2.latitude - centroid.latitude, o2.longitude - centroid.longitude);
-
-            if(angle1 < angle2) return 1;
-            else if (angle2 > angle1) return -1;
-            return 0;
         }
     }
 }

@@ -16,6 +16,11 @@ public class Occurrence implements Parcelable{
     public Occurrence() {
     }
 
+    public Occurrence(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     private Occurrence(Parcel in) {
         latitude = in.readDouble();
         longitude = in.readDouble();

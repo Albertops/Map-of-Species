@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Map of Species</string>
+    <string name="action_search">Buscar</string>
+    <string name="title_search_synonyms">Lista de sinónimos para</string>
+    <string name="subtext_search_synonyms">Seleccione los sinónimos que desea descargar</string>
+    <string name="action_download_data_gbif">Descargando datos desde GBIF...</string>
+    <string name="total_records">Total de registros:</string>
+    <string name="action_download_canceled">Descarga cancelada</string>
+    <string name="action_search_canceled">Búsqueda cancelada</string>
+    <string name="connection_failed">No hay conexión a internet</string>
+    <string name="action_download">Descarga</string>
+    <string name="action_search_synonyms">Buscando sinónimos en GBIF...</string>
+    <string name="no_records_found">No se encontraron registros</string>
+    <string name="acion_search_occurrences">Buscando ocurrencias en GBIF...</string>
+    <string name="action_accept">Aceptar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="title_activity_settings">Configuración</string>
+    <string name="general_options_category_title">Opciones generales</string>
+    <string name="search_options_category_title">Opciones de búsqueda</string>
+    <string name="no_synonyms_found">No se encontraron sinónimos</string>
+    <string name="kind_records_title">Tipo de registros</string>
+    <string name="kind_records_summary">Seleccione el tipo de registros para descargar</string>
+    <string name="map_type_title">Tipo de mapa</string>
+    <string name="map_type_summary">Seleccione el tipo de mapa predeterminado</string>
+    <string name="action_map_save">Guardar mapa</string>
+    <string name="action_map_load">Cargar mapa</string>
+    <string name="action_map_delete">Borrar mapa</string>
+    <string name="dialog_enter_name">Introduce el nombre del mapa</string>
+    <string name="dialog_load_name">Seleccione el mapa a cargar</string>
+    <string name="dialog_delete_name">Seleccione el mapa a borrar</string>
+    <string name="title_activity_search_results">Resultados de búsqueda</string>
+    <string name="action_save_data">Guardando datos...</string>
+    <string name="error_saving_data">No se han podido guardar los datos. Por favor, vuelva a intentarlo</string>
+    <string name="no_data">No existen datos guardados</string>
+    <string name="action_load_data">Cargando datos...</string>
+    <string name="action_delete_data">Borrando datos...</string>
+    <string name="no_markers">No existen marcadores en el mapa</string>
+    <string name="action_rendering_map">Renderizando mapa...</string>
+    <string name="empty_name">No se permiten nombres vacíos</string>
+    <string name="action_data_saved">Los datos se han guardado</string>
+    <string name="action_data_loaded">Los datos se han cargado</string>
+    <string name="action_data_deleted">Los datos se han borrado</string>
+    <string name="valid_records">son registros válidos</string>
+    <string name="action_drawing_markers">Dibujando marcadores...</string>
+    <string name="skip_records_00">Omitir registros en las coordenadas 0.0</string>
+    <string name="skip_duplicate_records">Omitir registros con la misma longitud y latitud</string>
+    <string name="welcome_dialog_title">Conectando a la base de datos online de GBIF</string>
+    <string name="welcome_dialog_header">Antes de usar esta aplicación, por favor compruebe los términos de uso de datos de GBIF:</string>
+    <string name="welcome_dialog_body">Pulse Aceptar para continuar la descarga de datos de GBIF. En cualquier otro caso, pulse Cancelar</string>
+    <string name="drawer_open">Hello Drawer!</string>
+    <string name="drawer_close">Goodbye Drawer!</string>
+    <string name="title_dialog_select_species">Envolvente convexa</string>
+    <string name="dialog_select_species">Seleccione las especies para aplicar la envolvente convexa</string>
+    <string name="title_convex_hull_color">Envolvente convexa</string>
+    <string name="summary_convex_hull_color">Seleccione un color para usar de relleno</string>
+    <string name="title_markers_color">Marcadores</string>
+    <string name="summary_markers_color">Seleccione un color para usar en los marcadores</string>
+    <string name="pick_color_button">Escoge un color</string>
+    <string name="dialog_select_color">Escoge un color</string>
+    <string name="subtext_dialog_select_color">Seleccione un color de la cuadrícula</string>
+    <string name="action_drawing_convex_hull">Dibujando la envolvente convexa...</string>
+    <string name="seek_bar_title">Canal alfa</string>
+    <string name="select_default_color_convex_hull">Seleccione el color predeterminado para usar de relleno</string>
+    <string name="title_delete_history">Limpiar historial</string>
+    <string name="summary_delete_history">Limpiar las sugerencias de búsqueda</string>
+    <string name="delete_history">El historial ha sido borrado</string>
+    <string name="dialog_delete_history">¿Estás seguro?</string>
+    <string name="error_deleting_data">No se han podido borrar los datos. Por favor, vuelva a intentarlo</string>
+
+    <string-array name="kind_records_entries">
+        <item>Espécimen</item>
+        <item>Observación</item>
+        <item>Vivo</item>
+        <item>Germoplasma</item>
+        <item>Fósil</item>
+        <item>Desconocido</item>
+    </string-array>
+
+    <string-array name="kind_records_values">
+        <item>specimen</item>
+        <item>observation</item>
+        <item>living</item>
+        <item>germplasm</item>
+        <item>fossil</item>
+        <item>unknown</item>
+    </string-array>
+
+    <string-array name="kind_records_default_values">
+        <item>specimen</item>
+        <item>observation</item>
+    </string-array>
+
+    <string-array name="map_type_entries">
+        <item>Normal</item>
+        <item>Híbrido</item>
+        <item>Satélite</item>
+        <item>Terreno</item>
+    </string-array>
+
+    <string-array name="map_type_values">
+        <item>normal</item>
+        <item>hybrid</item>
+        <item>satellite</item>
+        <item>terrain</item>
+    </string-array>
+
+    <string-array name="drawer_options">
+        <item>Guardar mapa</item>
+        <item>Cargar mapa</item>
+        <item>Borrar mapa</item>
+        <item>Limpiar mapa</item>
+        <item>Envolvente convexa</item>
+        <item>Configuración</item>
+    </string-array>
+
+    <array name="drawer_icons">
+        <item>@drawable/ic_action_save_dark</item>
+        <item>@drawable/ic_action_storage_dark</item>
+        <item>@drawable/ic_action_discard_dark</item>
+        <item>@drawable/ic_action_place_dark</item>
+        <item>@drawable/ic_action_convex_hull_dark</item>
+        <item>@drawable/ic_action_settings_dark</item>
+    </array>
+
+</resources>

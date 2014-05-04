@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import es.uvigo.esei.tfg.mapofspecies.R;
 
 /**
- * Adaptador personalizado para el DrawerLayout.
+ * Adaptador para el DrawerLayout.
  * @author Alberto Pardellas Soto
  */
 public class ListViewAdapter extends BaseAdapter{
@@ -22,6 +22,12 @@ public class ListViewAdapter extends BaseAdapter{
     private ArrayList<ItemObject> items;
     private int idLayout;
 
+    /**
+     * Constructor para el adaptador personalizado ListViewAdapter.
+     * @param context contexto en el cual se crea el adaptador.
+     * @param items elementos del adaptador.
+     * @param idLayout identificador del layout.
+     */
     public ListViewAdapter(Context context, ArrayList<ItemObject> items, int idLayout) {
         super();
 

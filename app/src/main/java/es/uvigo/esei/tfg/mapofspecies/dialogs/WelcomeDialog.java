@@ -1,23 +1,23 @@
-package es.uvigo.esei.tfg.mapofspecies.ui;
+package es.uvigo.esei.tfg.mapofspecies.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import es.uvigo.esei.tfg.mapofspecies.R;
-import es.uvigo.esei.tfg.mapofspecies.providers.CustomSuggestionsProvider;
 
 /**
- * Crea un diálogo que permite borrar el historial reciente.
+ * Se encarga de crear un diálogo que muestra los términos de uso.
  * @author Alberto Pardellas Soto
  */
-public class DeleteHistoryDialog extends DialogFragment {
+public class WelcomeDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,31 +26,33 @@ public class DeleteHistoryDialog extends DialogFragment {
         if (getActivity() != null) {
             builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            View view = inflater.inflate(R.layout.dialog_delete_history, null);
+            final View view;
+            view = inflater.inflate(R.layout.dialog_welcome, null);
+
             builder.setView(view)
-                    .setTitle(R.string.title_delete_history)
-                    .setIcon(R.drawable.ic_action_discard)
+                    .setTitle(R.string.welcome_dialog_title)
+                    .setIcon(R.drawable.ic_action_about)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    SearchRecentSuggestions suggestions =
-                                            new SearchRecentSuggestions(
-                                                    getActivity(),
-                                                    CustomSuggestionsProvider.AUTHORITY,
-                                                    CustomSuggestionsProvider.MODE);
+                                    SharedPreferences sharedPreferences = getActivity()
+                                            .getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
-                                    suggestions.clearHistory();
-                                    Toast.makeText(getActivity(),
-                                            getString(R.string.delete_history),
-                                            Toast.LENGTH_LONG).show();
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean("show_welcome_dialog", false);
+                                    editor.commit();
                                 }
-                            })
+                            }
+                    )
                     .setNegativeButton(getString(R.string.action_cancel),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                                    intent.addCategory(Intent.CATEGORY_HOME);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
                                 }
                             }
                     );
