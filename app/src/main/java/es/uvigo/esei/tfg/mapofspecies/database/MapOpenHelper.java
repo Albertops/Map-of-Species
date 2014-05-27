@@ -9,22 +9,22 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @author Alberto Pardellas Soto
  */
 public class MapOpenHelper extends SQLiteOpenHelper {
-    private static final String MAP_TABLE_CREATE = "CREATE TABLE names " +
+    private static final String MAP_TABLE_CREATE = "CREATE TABLE maps " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
-            "name TEXT);";
+            "title TEXT);";
 
-    private static final String NAME_TABLE_CREATE = "CREATE TABLE maps " +
+    private static final String NAME_TABLE_CREATE = "CREATE TABLE occurrences " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
             "latitude REAL, " +
             "longitude REAL, " +
             "color INTEGER, " +
             "name TEXT," +
-            "names_id INTEGER REFERENCES names (id));";
+            "occurrences_id INTEGER REFERENCES maps (_id));";
 
     private static final String CONVEX_HULL_TABLE_CREATE = "CREATE TABLE convex_hull " +
             "(_id INTEGER PRIMARY KEY  AUTOINCREMENT, " +
             "json_array TEXT," +
-            "convex_hull_id INTEGER REFERENCES names (id));";
+            "convex_hull_id INTEGER REFERENCES maps (_id));";
 
     private static final String MAP_TABLE_DROP = "DROP TABLE IF EXISTS Maps";
     private static final String NAME_TABLE_DROP = "DROP TABLE IF EXISTS Names";

@@ -250,13 +250,13 @@ public class MainActivity extends Activity
         Cursor cursor;
 
         if (sqLiteDatabase != null) {
-            cursor = sqLiteDatabase.query("names", fields, "name=?", args, null, null, null);
+            cursor = sqLiteDatabase.query("maps", fields, "title=?", args, null, null, null);
 
             if (cursor.moveToFirst()) {
-                long nameId = cursor.getLong(0);
+                long titleId = cursor.getLong(0);
 
                 LoadDataFromBD loadDataFromBD = new LoadDataFromBD();
-                loadDataFromBD.execute(String.valueOf(nameId));
+                loadDataFromBD.execute(String.valueOf(titleId));
 
                 GoogleMap googleMap = ((MapFragment) getFragmentManager()
                         .findFragmentById(R.id.map)).getMap();
@@ -284,13 +284,13 @@ public class MainActivity extends Activity
         Cursor cursor;
 
         if (sqLiteDatabase != null) {
-            cursor = sqLiteDatabase.query("names", fields, "name=?", args, null, null, null);
+            cursor = sqLiteDatabase.query("maps", fields, "title=?", args, null, null, null);
 
             if (cursor.moveToFirst()) {
-                long nameId = cursor.getLong(0);
+                long titleId = cursor.getLong(0);
 
                 DeleteDataFromBD deleteDataFromBD = new DeleteDataFromBD();
-                deleteDataFromBD.execute(String.valueOf(nameId));
+                deleteDataFromBD.execute(String.valueOf(titleId));
 
                 sqLiteDatabase.close();
             }
@@ -480,11 +480,11 @@ public class MainActivity extends Activity
                 MapOpenHelper mapOpenHelper = new MapOpenHelper(this, "DBMaps", null, 1);
                 SQLiteDatabase sqLiteDatabase = mapOpenHelper.getReadableDatabase();
 
-                String[] fields = new String[] {"name"};
+                String[] fields = new String[] {"title"};
                 Cursor cursor;
 
                 if (sqLiteDatabase != null) {
-                    cursor = sqLiteDatabase.query("names", fields, null, null, null, null, null);
+                    cursor = sqLiteDatabase.query("maps", fields, null, null, null, null, null);
 
                     ArrayList<String> results = new ArrayList<String>();
 
@@ -514,12 +514,12 @@ public class MainActivity extends Activity
 
             case 2:
                 mapOpenHelper = new MapOpenHelper(this, "DBMaps", null, 1);
-                sqLiteDatabase = mapOpenHelper.getWritableDatabase();
+                sqLiteDatabase = mapOpenHelper.getReadableDatabase();
 
-                fields = new String[] {"name"};
+                fields = new String[] {"title"};
 
                 if (sqLiteDatabase != null) {
-                    cursor = sqLiteDatabase.query("names", fields, null, null, null, null, null);
+                    cursor = sqLiteDatabase.query("maps", fields, null, null, null, null, null);
 
                     ArrayList<String> results = new ArrayList<String>();
 
@@ -631,9 +631,9 @@ public class MainActivity extends Activity
             SQLiteDatabase sqLiteDatabase = mapOpenHelper.getWritableDatabase();
 
             if (sqLiteDatabase != null) {
-                ContentValues nameValue = new ContentValues();
-                nameValue.put("name", strings[0]);
-                long nameId = sqLiteDatabase.insert("names", null, nameValue);
+                ContentValues titleValue = new ContentValues();
+                titleValue.put("title", strings[0]);
+                long titleId = sqLiteDatabase.insert("maps", null, titleValue);
 
                 for (Occurrence occurrence : pointList) {
                     ContentValues mapValues = new ContentValues();
@@ -642,9 +642,9 @@ public class MainActivity extends Activity
                     mapValues.put("longitude", occurrence.getLongitude());
                     mapValues.put("color", occurrence.getColor());
                     mapValues.put("name", occurrence.getName());
-                    mapValues.put("names_id", nameId);
+                    mapValues.put("occurrences_id", titleId);
 
-                    sqLiteDatabase.insert("maps", null, mapValues);
+                    sqLiteDatabase.insert("occurrences", null, mapValues);
                 }
 
                 Gson gson = new Gson();
@@ -653,7 +653,7 @@ public class MainActivity extends Activity
 
                 ContentValues polygonOptionsValues = new ContentValues();
                 polygonOptionsValues.put("json_array", string);
-                polygonOptionsValues.put("convex_hull_id", nameId);
+                polygonOptionsValues.put("convex_hull_id", titleId);
 
                 sqLiteDatabase.insert("convex_hull", null, polygonOptionsValues);
                 sqLiteDatabase.close();
@@ -711,7 +711,7 @@ public class MainActivity extends Activity
             Cursor cursor;
 
             if (sqLiteDatabase != null) {
-                cursor = sqLiteDatabase.query("maps", fields, "names_id=?", args, null, null, null);
+                cursor = sqLiteDatabase.query("occurrences", fields, "occurrences_id=?", args, null, null, null);
 
                 if (cursor != null) {
                     if (cursor.moveToFirst()) {
@@ -782,8 +782,8 @@ public class MainActivity extends Activity
             String[] args = new String[] {strings[0]};
 
             if (sqLiteDatabase != null) {
-                sqLiteDatabase.delete("names", "_id=?", args);
-                sqLiteDatabase.delete("maps", "names_id=?", args);
+                sqLiteDatabase.delete("maps", "_id=?", args);
+                sqLiteDatabase.delete("occurrences", "occurrences_id=?", args);
                 sqLiteDatabase.delete("convex_hull", "convex_hull_id=?", args);
 
                 sqLiteDatabase.close();
