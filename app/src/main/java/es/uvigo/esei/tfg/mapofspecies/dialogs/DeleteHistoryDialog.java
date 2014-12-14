@@ -30,7 +30,6 @@ public class DeleteHistoryDialog extends DialogFragment {
             View view = inflater.inflate(R.layout.dialog_delete_history, null);
             builder.setView(view)
                     .setTitle(R.string.title_delete_history)
-                    .setIcon(R.drawable.ic_action_discard)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

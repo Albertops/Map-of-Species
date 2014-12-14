@@ -4,7 +4,6 @@
         <ListPreference
             android:key="map_type"
             android:title="@string/map_type_title"
-            android:icon="@drawable/ic_action_web_site"
             android:summary="@string/map_type_summary"
             android:dialogTitle="@string/map_type_title"
             android:entries="@array/map_type_entries"
@@ -28,7 +27,6 @@
         <MultiSelectListPreference
             android:key="kind_records"
             android:title="@string/kind_records_title"
-            android:icon="@drawable/ic_action_download"
             android:summary="@string/kind_records_summary"
             android:dialogTitle="@string/kind_records_title"
             android:entries="@array/kind_records_entries"
@@ -38,7 +36,6 @@
         <Preference
             android:key="delete_history"
             android:title="@string/title_delete_history"
-            android:icon="@drawable/ic_action_discard"
             android:summary="@string/summary_delete_history" />
 
     </PreferenceCategory>

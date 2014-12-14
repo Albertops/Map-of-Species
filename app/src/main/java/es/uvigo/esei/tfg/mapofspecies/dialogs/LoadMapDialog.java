@@ -47,7 +47,6 @@ public class LoadMapDialog extends DialogFragment{
             View view = inflater.inflate(R.layout.dialog_load_map, null);
             builder.setView(view)
                     .setTitle(R.string.action_map_load)
-                    .setIcon(R.drawable.ic_action_storage)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

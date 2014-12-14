@@ -47,7 +47,6 @@ public class DeleteMapDialog extends DialogFragment{
             View view = inflater.inflate(R.layout.dialog_delete_map, null);
             builder.setView(view)
                     .setTitle(R.string.action_map_delete)
-                    .setIcon(R.drawable.ic_action_discard)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

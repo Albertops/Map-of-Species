@@ -16,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,7 +53,7 @@ import es.uvigo.esei.tfg.mapofspecies.utils.GBIFDataParser;
  * opciones.
  * @author Alberto Pardellas Soto
  */
-public class SearchResultsActivity extends Activity
+public class SearchResultsActivity extends ActionBarActivity
         implements SelectColorDialog.SelectColorDialogListener {
 
     private ArrayList<Occurrence> pointList;
@@ -71,10 +73,6 @@ public class SearchResultsActivity extends Activity
         setContentView(R.layout.activity_search_results);
 
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new SearchResultsFragment())
-                    .commit();
-
             Intent intent = getIntent();
 
             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -124,8 +122,6 @@ public class SearchResultsActivity extends Activity
         }
 
         final SelectColorDialog selectColorDialog = new SelectColorDialog();
-        selectColorDialog.setIcon(R.drawable.ic_action_place);
-
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -411,26 +407,6 @@ public class SearchResultsActivity extends Activity
         }
 
         return result;
-    }
-
-    /**
-     * Fragmento que contiene una lista de sinónimos y opciones de búsqueda.
-     */
-    public static class SearchResultsFragment extends Fragment {
-        public SearchResultsFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-
-            return inflater.inflate(R.layout.fragment_search_results, container, false);
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-        }
     }
 
     /**

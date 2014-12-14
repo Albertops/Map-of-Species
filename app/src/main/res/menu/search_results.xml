@@ -1,14 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.uvigo.esei.tfg.mapofspecies.activities.SearchResultsActivity" >
 
     <item android:id="@+id/action_cancel"
         android:title="@string/action_cancel"
-        android:icon="@drawable/ic_action_cancel_dark"
-        android:showAsAction="always" />
+        android:icon="@drawable/ic_close_white_48dp"
+        app:showAsAction="always" />
 
     <item android:id="@+id/action_accept"
         android:title="@string/action_accept"
-        android:icon="@drawable/ic_action_accept_dark"
-        android:showAsAction="always" />
+        android:icon="@drawable/ic_check_white_48dp"
+        app:showAsAction="always" />
 </menu>

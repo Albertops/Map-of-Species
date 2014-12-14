@@ -116,12 +116,12 @@
     </string-array>
 
     <array name="drawer_icons">
-        <item>@drawable/ic_action_save_dark</item>
-        <item>@drawable/ic_action_storage_dark</item>
-        <item>@drawable/ic_action_discard_dark</item>
-        <item>@drawable/ic_action_place_dark</item>
-        <item>@drawable/ic_action_convex_hull_dark</item>
-        <item>@drawable/ic_action_settings_dark</item>
+        <item>@drawable/ic_save_white_24dp</item>
+        <item>@drawable/ic_storage_white_24dp</item>
+        <item>@drawable/ic_delete_white_24dp</item>
+        <item>@drawable/ic_place_white_24dp</item>
+        <item>@drawable/ic_layers_white_24dp</item>
+        <item>@drawable/ic_settings_white_24dp</item>
     </array>
 
 </resources>

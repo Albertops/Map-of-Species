@@ -33,7 +33,6 @@ public class SaveMapDialog extends DialogFragment {
 
             builder.setView(view)
                     .setTitle(R.string.action_map_save)
-                    .setIcon(R.drawable.ic_action_save)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

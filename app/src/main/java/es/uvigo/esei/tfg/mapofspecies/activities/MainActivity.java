@@ -1,7 +1,5 @@
 package es.uvigo.esei.tfg.mapofspecies.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ContentValues;
@@ -17,22 +15,22 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,7 +58,7 @@ import es.uvigo.esei.tfg.mapofspecies.utils.PolygonUtils;
  * Muestra la pantalla principal.
  * @author Alberto Pardellas Soto
  */
-public class MainActivity extends Activity
+public class MainActivity extends ActionBarActivity
         implements SaveMapDialog.SaveMapDialogListener,
         LoadMapDialog.LoadMapDialogListener,
         DeleteMapDialog.DeleteMapDialogListener,
@@ -77,62 +75,15 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new GoogleMapFragment())
-                    .commit();
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        TypedArray drawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
-        String[] drawerOptions = getResources().getStringArray(R.array.drawer_options);
-        ArrayList<ItemObject> drawerItems = new ArrayList<ItemObject>();
-
-        if (drawerIcons != null) {
-            drawerItems.add(new ItemObject(drawerOptions[0], drawerIcons.getResourceId(0, -1)));
-            drawerItems.add(new ItemObject(drawerOptions[1], drawerIcons.getResourceId(1, -1)));
-            drawerItems.add(new ItemObject(drawerOptions[2], drawerIcons.getResourceId(2, -1)));
-            drawerItems.add(new ItemObject(drawerOptions[3], drawerIcons.getResourceId(3, -1)));
-            drawerItems.add(new ItemObject(drawerOptions[4], drawerIcons.getResourceId(4, -1)));
-            drawerItems.add(new ItemObject(drawerOptions[5], drawerIcons.getResourceId(5, -1)));
-        }
-
-        ListViewAdapter navigationAdapter = new ListViewAdapter(this, drawerItems, R.layout.item);
-
-        listView = (ListView) findViewById(R.id.left_drawer);
-        listView.setAdapter(navigationAdapter);
-        listView.setOnItemClickListener(new DrawerItemClickListener());
-
-        actionBarDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                R.drawable.ic_drawer_dark,
-                R.string.drawer_open,
-                R.string.drawer_close);
-
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow_dark, GravityCompat.START);
-
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        actionBarDrawerToggle.syncState();
-
-        if (getActionBar() != null) {
-            getActionBar().setIcon(R.drawable.ic_action_map_dark);
-        }
-
-        GoogleMap googleMap = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map)).getMap();
+        initDrawer();
+        initMap();
 
         SharedPreferences sharedPreferences =
                 getSharedPreferences("Preferences", Context.MODE_PRIVATE);
@@ -145,31 +96,8 @@ public class MainActivity extends Activity
             welcomeDialog.show(getFragmentManager(), "");
         }
 
-        SharedPreferences defaultSharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(MainActivity.this);
-
-        String mapType = defaultSharedPreferences.getString("map_type", "terrain");
-
-        if (googleMap != null) {
-            if (mapType.equals("normal")) {
-                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            }
-
-            if (mapType.equals("hybrid")) {
-                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            }
-
-            if (mapType.equals("satellite")) {
-                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-            }
-
-            if (mapType.equals("terrain")) {
-                googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-            }
-
-            RenderingMap prepareMarkerOptions = new RenderingMap();
-            prepareMarkerOptions.execute(pointList);
-        }
+        RenderingMap prepareMarkerOptions = new RenderingMap();
+        prepareMarkerOptions.execute(pointList);
     }
 
     @Override
@@ -179,6 +107,9 @@ public class MainActivity extends Activity
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        searchPlate.setBackgroundResource(R.drawable.abc_textfield_search_activated_mtrl_alpha);
 
         return true;
     }
@@ -258,8 +189,8 @@ public class MainActivity extends Activity
                 LoadDataFromBD loadDataFromBD = new LoadDataFromBD();
                 loadDataFromBD.execute(String.valueOf(titleId));
 
-                GoogleMap googleMap = ((MapFragment) getFragmentManager()
-                        .findFragmentById(R.id.map)).getMap();
+                GoogleMap googleMap = ((SupportMapFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
                 if (googleMap != null) {
                     googleMap.clear();
@@ -309,8 +240,8 @@ public class MainActivity extends Activity
             String nameSelected, Boolean colorMarker, Integer alphaChannel) {
 
         if (nameSelected != null) {
-            GoogleMap googleMap = ((MapFragment) getFragmentManager()
-                    .findFragmentById(R.id.map)).getMap();
+            GoogleMap googleMap = ((SupportMapFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             float[] hsv = new float[3];
 
@@ -548,8 +479,8 @@ public class MainActivity extends Activity
                 break;
 
             case 3:
-                GoogleMap googleMap = ((MapFragment) getFragmentManager()
-                        .findFragmentById(R.id.map)).getMap();
+                GoogleMap googleMap = ((SupportMapFragment)
+                        getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
                 if (googleMap != null) {
                     googleMap.clear();
@@ -605,18 +536,72 @@ public class MainActivity extends Activity
     }
 
     /**
-     * Fragmento que contiene una vista del mapa.
+     * Inicializa el DrawerLayout
      */
-    public static class GoogleMapFragment extends Fragment {
+    private void initDrawer() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        TypedArray drawerIcons = getResources().obtainTypedArray(R.array.drawer_icons);
+        String[] drawerOptions = getResources().getStringArray(R.array.drawer_options);
+        ArrayList<ItemObject> drawerItems = new ArrayList<ItemObject>();
 
-        public GoogleMapFragment() {
+        if (drawerIcons != null) {
+            drawerItems.add(new ItemObject(drawerOptions[0], drawerIcons.getResourceId(0, -1)));
+            drawerItems.add(new ItemObject(drawerOptions[1], drawerIcons.getResourceId(1, -1)));
+            drawerItems.add(new ItemObject(drawerOptions[2], drawerIcons.getResourceId(2, -1)));
+            drawerItems.add(new ItemObject(drawerOptions[3], drawerIcons.getResourceId(3, -1)));
+            drawerItems.add(new ItemObject(drawerOptions[4], drawerIcons.getResourceId(4, -1)));
+            drawerItems.add(new ItemObject(drawerOptions[5], drawerIcons.getResourceId(5, -1)));
         }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        ListViewAdapter navigationAdapter = new ListViewAdapter(this, drawerItems, R.layout.item);
 
-            return inflater.inflate(R.layout.fragment_main, container, false);
+        listView = (ListView) findViewById(R.id.left_drawer);
+        listView.setAdapter(navigationAdapter);
+        listView.setOnItemClickListener(new DrawerItemClickListener());
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close);
+
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow_dark, GravityCompat.START);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        actionBarDrawerToggle.syncState();
+    }
+
+    private void initMap() {
+        GoogleMap googleMap = ((SupportMapFragment)
+                getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(MainActivity.this);
+
+        String mapType = defaultSharedPreferences.getString("map_type", "terrain");
+
+        if (googleMap != null) {
+            if (mapType.equals("normal")) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            }
+
+            if (mapType.equals("hybrid")) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            }
+
+            if (mapType.equals("satellite")) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            }
+
+            if (mapType.equals("terrain")) {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            }
         }
     }
 
@@ -878,8 +863,8 @@ public class MainActivity extends Activity
 
         @Override
         protected void onPostExecute(ArrayList<MarkerOptions> result) {
-            GoogleMap googleMap = ((MapFragment) getFragmentManager()
-                    .findFragmentById(R.id.map)).getMap();
+            GoogleMap googleMap = ((SupportMapFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 
             if (googleMap != null) {
                 googleMap.clear();

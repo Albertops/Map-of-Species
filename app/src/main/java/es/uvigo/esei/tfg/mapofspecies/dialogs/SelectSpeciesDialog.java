@@ -50,7 +50,6 @@ public class SelectSpeciesDialog extends DialogFragment{
             final View view = inflater.inflate(R.layout.dialog_select_species, null);
             builder.setView(view)
                     .setTitle(R.string.title_dialog_select_species)
-                    .setIcon(R.drawable.ic_action_convex_hull)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

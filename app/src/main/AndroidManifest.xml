@@ -6,15 +6,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:logo="@drawable/ic_action_map_dark"
         android:theme="@style/AppTheme" >
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCU8TqpPDMZtiUUIjIv9qn3MGLbQNvn2nQ" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBDd01eROoObv5yBgB9HkgmbCLbFEh9lPw" />
+            android:value="AIzaSyDzLwtmnq1H9-KtEXX5yevSsT9E_dl8qYI" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -42,7 +38,6 @@
         <activity
             android:name="es.uvigo.esei.tfg.mapofspecies.activities.SearchResultsActivity"
             android:label="@string/title_activity_search_results"
-            android:logo="@drawable/ic_action_search_dark"
             android:noHistory="true" >
 
             <intent-filter>
@@ -56,8 +51,7 @@
 
         <activity
             android:name="es.uvigo.esei.tfg.mapofspecies.activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:logo="@drawable/ic_action_settings_dark" >
+            android:label="@string/title_activity_settings" >
         </activity>
 
         <provider

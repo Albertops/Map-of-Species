@@ -31,7 +31,6 @@ public class WelcomeDialog extends DialogFragment {
 
             builder.setView(view)
                     .setTitle(R.string.welcome_dialog_title)
-                    .setIcon(R.drawable.ic_action_about)
                     .setPositiveButton(getString(R.string.action_accept),
                             new DialogInterface.OnClickListener() {
                                 @Override

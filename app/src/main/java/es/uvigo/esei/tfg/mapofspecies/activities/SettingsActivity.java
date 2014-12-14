@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 
 import es.uvigo.esei.tfg.mapofspecies.R;
@@ -17,7 +18,7 @@ import es.uvigo.esei.tfg.mapofspecies.preferences.ColorPreference;
  * Muestra la pantalla de preferencias.
  * @author Alberto Pardellas Soto
  */
-public class SettingsActivity extends PreferenceActivity
+public class SettingsActivity extends ActionBarActivity
         implements SelectColorDialog.SelectColorDialogListener {
 
     private SettingsFragment settingsFragment;
@@ -25,6 +26,7 @@ public class SettingsActivity extends PreferenceActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
 
         settingsFragment = new SettingsFragment();
 
@@ -94,7 +96,6 @@ public class SettingsActivity extends PreferenceActivity
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         SelectColorDialog selectColorDialog = new SelectColorDialog();
-                        selectColorDialog.setIcon(R.drawable.ic_action_place);
 
                         if (getFragmentManager() != null) {
                             selectColorDialog.show(getFragmentManager(), "markers_color");
@@ -115,7 +116,6 @@ public class SettingsActivity extends PreferenceActivity
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         SelectColorDialog selectColorDialog = new SelectColorDialog();
-                        selectColorDialog.setIcon(R.drawable.ic_action_convex_hull);
 
                         if (getFragmentManager() != null) {
                             selectColorDialog.show(getFragmentManager(), "convex_hull_color");
